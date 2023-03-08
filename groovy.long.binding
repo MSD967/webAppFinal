@@ -1,0 +1,38 @@
+def errorMessage
+def <func2>(body) {
+
+<some code>
+      stages {
+          stage('Initialise') {
+            steps {
+                buildName "${JOB_NAME}#${BUILD_NUMBER}"
+                script{
+                    if (env.RELEASE == "1.0"){
+                        errorMessage = "Please provide RELEASE"
+                        currentBuild.result = 'FAILURE'
+                        return
+                    }
+                }
+            }
+           post {
+                    unsuccessful {
+                        notifySlack(
+                            **message: "Deploy Initialise failed: ${errorMessage}",**
+                            channel:"${slackDeployChannel}")
+                            script{
+                                env.DEPLOY = 'no'
+                            }
+                    }
+            }
+        }
+    
+def <func1>(arguments) {
+  try{
+       <SOME CODE>
+       return 0
+     }
+     catch (Exception e) {
+       errorMessage = e.getMessage()
+       return 0
+}
+}
